@@ -14,7 +14,9 @@
 
 package main
 
-import "github.com/patrick-motard/sssh/cmd"
+import (
+	"github.com/patrick-motard/sssh/cmd"
+)
 
 func main() {
 	cmd.Execute()
