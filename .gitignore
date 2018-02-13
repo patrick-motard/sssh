@@ -12,3 +12,12 @@
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
+
+# project specific
+# .pem & .key files are frequently output from the create command
+# I'm adding the file extension to be ignored becuase they're only
+# ever created as part of testing and shouldn't be added to the repo
+*.pem
+*.key
+# this is the name of the binary output by go build, dont want to check that in
+sssh
