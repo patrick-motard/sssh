@@ -21,11 +21,13 @@
 package cmd
 
 import (
-	"bufio"
+	"strings"
+	// "bufio"
 	"fmt"
-	"io"
+	// "io"
 	"io/ioutil"
-	"os"
+	// "os"
+	"os/user"
 
 	"github.com/spf13/cobra"
 )
@@ -52,7 +54,17 @@ func check(e error) {
 }
 
 func init() {
-	dat, err := ioutil.ReadFile(filename string)
+
+	usr, err := user.Current()
+	check(err)
+	// s := []string{usr.HomeDir, ".ssh/config"}
+	filepath := strings.Join([]string{usr.HomeDir, ".ssh/config"}, "/")
+	fmt.Print(filepath)
+	dat, err := ioutil.ReadFile(filepath)
+	check(err)
+	// fmt.Print(usr.HomeDir)
+
+	fmt.Print(string(dat))
 	rootCmd.AddCommand(readCmd)
 
 	// Here you will define your flags and configuration settings.
