@@ -59,12 +59,13 @@ func init() {
 	check(err)
 	// s := []string{usr.HomeDir, ".ssh/config"}
 	filepath := strings.Join([]string{usr.HomeDir, ".ssh/config"}, "/")
-	fmt.Print(filepath)
+	// fmt.Print(filepath)
 	dat, err := ioutil.ReadFile(filepath)
+	_ = dat
 	check(err)
 	// fmt.Print(usr.HomeDir)
 
-	fmt.Print(string(dat))
+	// fmt.Print(string(dat))
 	rootCmd.AddCommand(readCmd)
 
 	// Here you will define your flags and configuration settings.

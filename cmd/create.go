@@ -21,7 +21,7 @@
 package cmd
 
 import (
-	"crypto/rand"
+	// "crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/asn1"
@@ -29,9 +29,12 @@ import (
 	"encoding/pem"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
+
+var name string
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
@@ -45,25 +48,33 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("create called")
+
+		fmt.Println(name)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(createCmd)
-	reader := rand.Reader
-	bitsize := 4096
-	key, err := rsa.GenerateKey(reader, bitsize)
-	checkError(err)
+	createCmd.Flags().StringVarP(&name, "name", "n", "", "name of key to create")
+	createCmd.MarkFlagRequired("name")
 
-	publicKey := key.PublicKey
+	fmt.Println(strings.Join([]string{name, "key"}, "."))
+
+	// reader := rand.Reader
+	// bitsize := 4096
+	// key, err := rsa.GenerateKey(reader, bitsize)
+	// checkError(err)
+	// fmt.Println(strings.Join([]string{name, "key"}, "."))
+
+	// publicKey := key.PublicKey
 
 	// saveGobKey("private.key", key)
 	// saveGobKey("public.key", publicKey)
-	saveGobKey("private.key", key)
-	savePEMKey("private.pem", key)
+	// saveGobKey(strings.Join([]string{name, "key"}, "."), key)
+	// savePEMKey("private.pem", key)
 
-	saveGobKey("public.key", publicKey)
-	savePublicPEMKey("public.pem", publicKey)
+	// saveGobKey("public.key", publicKey)
+	// savePublicPEMKey("public.pem", publicKey)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
