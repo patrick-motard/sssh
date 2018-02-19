@@ -51,6 +51,11 @@ to quickly create a Cobra application.`,
 		usr, err := user.Current()
 		check(err)
 		filepath := strings.Join([]string{usr.HomeDir, ".ssh", name}, "/")
+		var publicKeyName string
+		var privateKeyName string
+		if strings.HasSuffix(name, ".pub") {
+
+		}
 		fmt.Println("key exists: ", fileExists(filepath))
 
 		fmt.Println("create called")
