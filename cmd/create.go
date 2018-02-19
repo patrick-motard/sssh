@@ -29,6 +29,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"os"
+	"os/user"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -47,10 +48,23 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		usr, err := user.Current()
+		check(err)
+		filepath := strings.Join([]string{usr.HomeDir, ".ssh", name}, "/")
+		fmt.Println("key exists: ", fileExists(filepath))
+
 		fmt.Println("create called")
 
-		fmt.Println(name)
+		// fmt.Println(name)
 	},
+}
+
+func fileExists(filepath string) bool {
+	if _, err := os.Stat(filepath); err == nil {
+		return true
+	} else {
+		return false
+	}
 }
 
 func init() {
@@ -58,7 +72,7 @@ func init() {
 	createCmd.Flags().StringVarP(&name, "name", "n", "", "name of key to create")
 	createCmd.MarkFlagRequired("name")
 
-	fmt.Println(strings.Join([]string{name, "key"}, "."))
+	// fmt.Println(strings.Join([]string{name, "key"}, "."))
 
 	// reader := rand.Reader
 	// bitsize := 4096
