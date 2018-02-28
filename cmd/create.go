@@ -37,6 +37,7 @@ import (
 )
 
 var name string
+var keyPath string
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
@@ -49,6 +50,8 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("directory: %s \n", keyPath)
+		fmt.Println(len(keyPath))
 		usr, err := user.Current()
 		check(err)
 		var publicKeyName string
@@ -97,6 +100,8 @@ func init() {
 	rootCmd.AddCommand(createCmd)
 	createCmd.Flags().StringVarP(&name, "name", "n", "", "name of key to create")
 	createCmd.MarkFlagRequired("name")
+
+	createCmd.Flags().StringVarP(&keyPath, "directory", "d", "", "path to store keys in")
 
 	// fmt.Println(strings.Join([]string{name, "key"}, "."))
 
