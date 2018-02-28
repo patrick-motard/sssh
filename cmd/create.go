@@ -30,6 +30,7 @@ import (
 	"fmt"
 	"os"
 	"os/user"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -50,17 +51,37 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		usr, err := user.Current()
 		check(err)
-		filepath := strings.Join([]string{usr.HomeDir, ".ssh", name}, "/")
 		var publicKeyName string
 		var privateKeyName string
-		if strings.HasSuffix(name, ".pub") {
 
+		// parse name and assign public/private names accordingly
+		if strings.HasSuffix(name, ".pub") {
+			publicKeyName = name
+			privateKeyName = strings.TrimSuffix(name, filepath.Ext(name))
+		} else {
+			publicKeyName = strings.Join([]string{name, "pub"}, ".")
+			privateKeyName = name
 		}
-		fmt.Println("key exists: ", fileExists(filepath))
+
+		publicKeyFilePath := strings.Join([]string{usr.HomeDir, ".ssh", publicKeyName}, "/")
+		privateKeyFilePath := strings.Join([]string{usr.HomeDir, ".ssh", privateKeyName}, "/")
+
+		if fileExists(publicKeyFilePath) {
+			fmt.Println(fmt.Sprintf("Error: public key %s already exists.", publicKeyName))
+		}
+
+		if fileExists(privateKeyFilePath) {
+			fmt.Println(fmt.Sprintf("Error: private key %s already exists.", privateKeyName))
+		}
+
+		if fileExists(privateKeyFilePath) || fileExists(publicKeyFilePath) {
+			os.Exit(1)
+		}
+
+		fmt.Println("public", publicKeyName)
+		fmt.Println("private", privateKeyName)
 
 		fmt.Println("create called")
-
-		// fmt.Println(name)
 	},
 }
 
